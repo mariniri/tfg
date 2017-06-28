@@ -1,23 +1,5 @@
 <?php
 
-set_time_limit(0);
-ini_set("memory_limit", "256M");
-ini_set("auto_detect_line_endings", true);
-// PHP configuration
-// Define start time for duration calculation
-define("TIME_START", microtime(true));
-
-// Show debug information
-define("DEBUG", false);
-
-// Values for genetic algorithms
-define("GA_CITY", 100);
-define("GA_POPULATION", round(abs(log(GA_CITY + 1)) * 1000));
-define("GA_SELECTION", 0.50);
-define("GA_MUTATION", 0.1);
-define("GA_CROSSOVER", 0.4);
-srand();
-
 class Functions {
     /*
      * Maximum execution time
@@ -146,82 +128,20 @@ class Functions {
     }
 
     function runAlgorithm($visitas) {
-        $maximumTime = 90;
-        $currentGeneration = 0;
 
-// Execution time of each generation
-        $executionTime = array();
-
-// Save best solutions in each loop
-        $bestSolutionList = array();
-
-        $manager = Manager::getInstance();
-        $manager->load($visitas);
-        $population = new Population();
-        $distance = $this->getMatrizDistancia($visitas);
-        $population->initialization(GA_POPULATION, $distance);
-        if (DEBUG)
-            echo 'initialization <br />';
-
-        do {
-            $population->selectionElitist(GA_SELECTION);
-            if (DEBUG) {
-                echo 'selectionElitist <br />';
-            }
-            if (DEBUG) {
-                echo 'size : ' . $population->getSize() . ' <br />';
-            }
-
-            $population->mutationAll(GA_MUTATION);
-            if (DEBUG) {
-                echo 'mutationAll <br />';
-            }
-            if (DEBUG) {
-                echo 'size : ' . $population->getSize() . ' <br />';
-            }
-
-            $population->crossoverAll(GA_CROSSOVER);
-            if (DEBUG) {
-                echo 'crossoverAll <br />';
-            }
-            if (DEBUG) {
-                echo 'size : ' . $population->getSize() . ' <br />';
-            }
-
-            $currentTime = microtime(true) - TIME_START;
-
-            $executionTime[$currentGeneration] = round($currentTime);
-            $bestSolutionList[$currentGeneration] = $population->bestSolution();
-
-            if (DEBUG) {
-                echo '<p> (' . $currentTime . ' sec) ' . $bestSolutionList[$currentGeneration] . '</p>';
-            }
-
-            $currentGeneration++;
+        $plan = new Plan();
+        foreach ($visitas as $v) {
+            $plan->addPlace($v);
+            //echo $v->getIdvisita();
         }
-        while ($currentTime < $maximumTime OR ( $maximumTime == null AND $population->isStagnant(0.01)));
 
-//        echo "<pre>";
-//        var_dump($this->getMatrizDistancia($visitas));
-//        echo "</pre>";
-    }
+        $life = new Life();
+        $roadmap = $life->getShortestPath($plan);
 
-    function getMatrizDistancia($visitas) {
-        $i = 0;
-        $j = 0;
-        $matriz = Array();
-        for ($i = 0; $i < count($visitas); $i++) {
-            for ($j = $i; $j < count($visitas); $j++) {
-                if ($i == $j) {
-                    $matriz[$i][$j] = 0;
-                } else {
-                    $aux = $this->getTiempoCocheDos($visitas[$i], $visitas[$j]);
-                    $matriz[$i][$j] = $aux;
-                    $matriz[$j][$i] = $aux;
-                }
-            }
+        echo "Distance: {$roadmap->distance()} \n" ;
+        foreach ($roadmap->places as $place) {
+            echo "Move: {$place->getDireccion()} \n" ;
         }
-        return $matriz;
     }
 
 }
