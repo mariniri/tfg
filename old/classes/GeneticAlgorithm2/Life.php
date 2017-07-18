@@ -3,11 +3,23 @@
 class Life {
 
     public $selection;
+    public $roadmap;
+    
 
     public function __construct(Selection $selection = null) {
         $this->selection = ($selection === null) ? new Selection(20) : $selection;
+        $this->roadmap = new Roadmap($places, "time",$allplaces); 
     }
 
+    function getRoadmap() {
+        return $this->roadmap;
+    }
+
+    function setRoadmap($roadmap) {
+        $this->roadmap = $roadmap;
+    }
+
+        
     public function getShortestPath(Plan $plan) {
         $mutation = $this->selection->getMutations();
 
@@ -15,7 +27,6 @@ class Life {
         $allplaces=$places;
         $from = array_shift($places);
 
-        $roadmap = new Roadmap($places, "time",$allplaces); 
         $roadmap->addPlace($from);
 
         $roadmaps = $this->sortRoadmaps($this->explodeRoadmaps([$roadmap]));
@@ -50,9 +61,6 @@ class Life {
         $places = $roadmap->getRemainingPlaces();
         $from = $roadmap->getLastPlace();
         $matrix = $roadmap->getMatrix();
-        echo "<pre>";
-        var_dump($matrix);
-        echo"</pre>";
         $selections = [];
         foreach ($places as $selection) {
             $selections[] = [

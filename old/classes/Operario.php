@@ -15,48 +15,43 @@ include 'Usuario.php';
 class Operario { //extends Usuario {
     //put your code here
     public $user;
-    public $horario;
     public $idoperario;
     public $posicionactual;
-    public $itinerario;
-
-    function __construct($user, $horario, $idoperario, $posicionactual) {
+    public $jornada;
+    
+    function __construct($user, $idoperario, $posicionactual) {
         // parent::__construct();
         $this->user = $user;
-        $this->horario = $horario;
         $this->idoperario = $idoperario;
         $this->posicionactual = $posicionactual;
-        $this->itinerario = array();
+        $this->jornada = array();
     }
 
     function getUser() {
         return $this->user;
     }
 
-    function getHorario() {
-        return $this->horario;
-    }
-
     function getIdoperario() {
         return $this->idoperario;
     }
 
-    function getItinerario() {
-        return $this->itinerario;
+    function getJornada() {
+        return $this->jornada;
     }
 
     function getPosicionactual() {
         return $this->posicionactual;
     }
-
-    function setItinerarioDia($itinerariodia, $fecha) {
-        $this->itinerario["$fecha"] = $itinerariodia;
+    
+    function addJornada($j) {
+        $aux=$j->getFecha();
+        $this->jornada["$aux"] = $j;
 
     }
 
-    function getItinerarioDia($fecha) {
-        if (array_key_exists("$fecha", $this->itinerario)) {
-            return $this->itinerario["$fecha"];
+    function getJornadaDia($fecha) {
+        if (array_key_exists("$fecha", $this->jornada)) {
+            return $this->jornada["$fecha"];
         } else {
             return null;
         }

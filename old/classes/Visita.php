@@ -20,31 +20,53 @@ class Visita {
     public $latitud;
     public $longitud;
     public $direccion;
-    public $fecha;
     public $duracionestimada;
+    public $inicio;
+    public $fin;
+    public $fecha; 
     
-    function __construct($fecha,$horainicio, $horafin, $latitud, $longitud, $direccion, $duracionestimada) {
-        $this->horainicio = $horainicio;
-        $this->horafin = $horafin;
+    function __construct($horainicio, $horafin, $latitud, $longitud, $direccion) {
+        $this->inicio = strtotime($horainicio);
+        $this->fin = strtotime($horafin);
+        $this->horainicio = date('r', $this->inicio);
+        $this->horafin = date('r', $this->fin);
         $this->latitud = $latitud;
         $this->longitud = $longitud;
         $this->direccion = $direccion;
-        $this->fecha = $fecha;
-        $this->duracionestimada=$duracionestimada;
+        $this->fecha= explode(" ",$horainicio)[0];
+        $this->duracionestimada=   $this->total = $this->fin - $this->inicio;
+        
     }
 
-    function getDuracion() {
+    function getInicio() {
+        return $this->inicio;
+    }
+
+    function getFin() {
+        return $this->fin;
+    }
+
+    function setInicio($inicio) {
+        $this->inicio = $inicio;
+    }
+
+    function setFin($fin) {
+        $this->fin = $fin;
+    }
+
+        function getDuracion() {
         return $this->duracionestimada;
     }
 
-    function setDuracion($duracion) {
-        $this->duracionestimada = $duracion;
-    }
     
     function getHorainicio() {
         return $this->horainicio;
     }
 
+    function getFecha(){
+        return $this->fecha;
+    }
+    
     function getHorafin() {
         return $this->horafin;
     }
@@ -53,14 +75,7 @@ class Visita {
         return $this->latitud;
     }
 
-    function getFecha() {
-        return $this->fecha;
-    }
 
-    public function setFecha($fecha) {
-        $this->fecha = $fecha;
-    }
-    
     function getLongitud() {
         return $this->longitud;
     }

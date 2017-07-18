@@ -7,6 +7,7 @@ class Distance {
         $long1 = $visita1->getLongitud();
         $lat2 = $visita2->getLatitud();
         $long2 = $visita2->getLongitud();
+        echo $visita1->getDireccion() . $visita2->getDireccion();
         $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" . $lat1 . "," . $long1 . "&destinations=" . $lat2 . "," . $long2 . "&mode=driving&language=es-ES";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -37,14 +38,15 @@ class Distance {
     }
 
     function getSegundos($tiempollegada) {
+        echo $tiempollegada . "<br>";
         if (strpos($tiempollegada, 'h')) {
             $aux = explode("h", $tiempollegada);
             $horas = $aux[0];
             $aux = explode(" ", $tiempollegada);
-            $minutos = ($horas * 60 + $aux[1]) * 60;
+            $minutos = ($horas * 60 + $aux[1]) ;
         } else {
             $aux = explode(" ", $tiempollegada);
-            $minutos = $aux[0] * 60;
+            $minutos = $aux[0] ;
         }
         return $minutos;
     }
