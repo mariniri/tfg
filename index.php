@@ -46,14 +46,15 @@ and open the template in the editor.
 
         $central = new Central("Universidad Pablo de Olavide", 37.355241, -5.937404, "Universidad Pablo de Olavide Spain");
         $tareas = Array();
-        array_push($tareas, new Tarea('2017-01-01 9:45', '30', 37.337252, -5.931373));
-        array_push($tareas, new Tarea('2017-01-01 10:30', '30', 37.343170, -5.937070));
-        array_push($tareas, new Tarea('2017-01-01 10:00', '30', 37.352671, -5.947069));
-        array_push($tareas, new Tarea('2017-01-01 14:46', '30', 37.3590926, -5.74919037));
-        array_push($tareas, new Tarea('2017-01-01 15:46', '30', 37.51043415, -5.55282209));
-        array_push($tareas, new Tarea('2017-01-01 16:46', '30', 37.02648063, -6.17896675));
-        array_push($tareas, new Tarea('2017-01-01 11:46', '30', 37.6893324, -6.24471462));
-        array_push($tareas, new Tarea('2017-01-01 12:46', '30', 37.41053292, -6.23668757));
+        array_push($tareas, new Tarea('2017-01-01 8:30', '300', 37.337252, -5.931373, 1));
+        array_push($tareas, new Tarea('2017-01-01 10:30', '300', 37.343170, -5.937070, 2));
+        array_push($tareas, new Tarea('2017-01-01 10:00', '300', 37.352671, -5.947069, 3));
+        array_push($tareas, new Tarea('2017-01-01 14:46', '30', 37.3590926, -5.74919037, 4));
+        array_push($tareas, new Tarea('2017-01-01 15:46', '300', 37.51043415, -5.55282209, 5));
+        array_push($tareas, new Tarea('2017-01-01 16:46', '300', 37.02648063, -6.17896675, 6));
+        array_push($tareas, new Tarea('2017-01-01 11:46', '30', 37.6893324, -6.24471462, 7));
+        array_push($tareas, new Tarea('2017-01-01 12:46', '300', 37.41053292, -6.23668757, 8));
+
 //        array_push($tareas, new Tarea('2017-01-01 13:46', '2017-01-01 14:00', 37.40079571, -6.07446391));
 //        array_push($tareas, new Tarea('2017-01-01 15:46', '2017-01-01 16:00', 37.47746476, -5.52077692));
 //        array_push($tareas, new Tarea('2017-01-01 16:46', '2017-01-01 17:30', 37.36511825, -5.73941369));
@@ -120,8 +121,8 @@ and open the template in the editor.
 //        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.634835, -5.55349572));
 //        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.27381154, -6.35931072));
 
-       
-    
+
+
 
         $operarios = Array();
 
@@ -132,10 +133,10 @@ and open the template in the editor.
         $jornada1 = new Jornada('2017-01-01 9:30', '2017-01-01 18:30');
         $jornada2 = new Jornada('2017-01-01 9:30', '2017-01-01 18:30');
         $jornada3 = new Jornada('2017-01-01 9:30', '2017-01-01 18:30');
-        
-     
-        
-        
+
+
+
+
         $oper1->addJornada($jornada1);
         $oper2->addJornada($jornada2);
         $oper3->addJornada($jornada3);
@@ -147,16 +148,15 @@ and open the template in the editor.
 
         $planificador = new Planificador($operarios, $tareas, $central);
 
-
-        echo '<pre>';
-      //  print_r($planificador);
-        echo 'Tareas Ordenadas desde central:<br>';
-      //   print_r($planificador->getTareas());
+//
+//        echo '<pre>';
+//       print_r($planificador);
+//        echo 'Tareas Ordenadas desde central:<br>';
+//      //   print_r($planificador->getTareas());
 
         $planificador->distribuirTareas("2017-01-01");
-        echo "Operario con sus Tareas asignadas:<br>";
-     //   print_r($planificador->getOperarios());
-
+        //  echo "Operario con sus Tareas asignadas:<br>";
+        //   print_r($planificador->getOperarios());
 //        $plan = new Plan();
 //        foreach ($tareas as $v) {
 //            $plan->addPlace($v);
@@ -171,12 +171,9 @@ and open the template in the editor.
 //        echo "<pre>";
 //        var_dump($matriz);
 //        echo "</pre>";
-
-
-
-        echo "Tareas pendientes:<br>";
-        //   print_r($planificador->getPendientes());
-        echo '</pre>';
+//        echo "Tareas pendientes:<br>";
+//        //   print_r($planificador->getPendientes());
+//        echo '</pre>';
 
         $gmap = new GoogleMapAPI();
         $gmap->setDivId('test1');
@@ -208,14 +205,16 @@ and open the template in the editor.
             $nombre = $oper->getNombre();
 
             $jornadasOper = $oper->getJornadas();
-
+            echo "<pre>";
+            var_dump($jornadasOper);
+            echo "</pre>";
             if ($cont == 1) {
                 $gmap->addMarkerByCoords($central->getLatitud(), $central->getLongitud(), 'Central :' . $central->getNombre(), '<strong>Direccion: <br>' . $central->getDireccion() . '</strong>', '', $colorsIcons[0], 0, true, $central->getNombre());
             }
             foreach ($jornadasOper->getTareas() as $t) {
 
                 if (count($t) > 0) {
-                    $gmap->addMarkerByCoords($t->getLatitud(), $t->getLongitud(), 'Operario ' . $nombre, '<strong>Operario : ' . $nombre . '<br>Inicio : ' . $t->getFechaInicio() . '<br>Fin : ' . $t->getFechaFin() . '<br>Total Minutos: ' . ($t->getTotal() / 60) . '</strong>', '', $colorsIcons[$colors], $cont++, true, $nombre);
+                    $gmap->addMarkerByCoords($t->getLatitud(), $t->getLongitud(), 'Operario ' . $nombre, '<strong>Operario : '  .  '<br>Total Minutos: ' . ($t->getTotal() ) . '</strong>', '', $colorsIcons[$colors], $cont++, true, $nombre);
                 }
             }
             $colors++;

@@ -113,50 +113,50 @@ class Planificador {
 
     function distribuirTareas($fecha) {
 
-        $auxJornadas = Array();
+        $jornadas = Array();
 
         foreach ($this->operarios as $operario) {
 
             if (($aux = $operario->getJornadaDia($fecha))) {
-                array_push($auxJornadas, $aux);
+                array_push($jornadas, $aux);
             }
         }
+        $totaltareas = $this->tareas;
+        $numtareas = count($totaltareas);
+        $numjornadas = count($jornadas);
+        $auxjornada = 0;
+        $auxtarea = 0;
+        while ($numtareas > 0 && $auxjornada < $numjornadas) {
+            $despl = 0;
+            if ($jornadas[$auxjornada]->numTareas() > 0) {
+                $last = $jornadas[$auxjornada]->getLast();
+                $lastid = $last->getId();
+                $nowid = $totaltareas[$auxtarea]->getId();
+                $despl = $this->matrix["$lastid"]["$nowid"];
+            }
+            $total = $despl + $totaltareas[$auxtarea]->getTotal();
+            //echo $jornadas[$auxjornada]->getMinLibres($this->matrix);
+            if ($jornadas[$auxjornada]->getMinLibres($this->matrix) >= $total) {
+                $indices = array_keys($totaltareas);
+                $jornadas[$auxjornada]->addTarea($totaltareas[$indices[0]]);
+                $aux = $totaltareas[$indices[$numtareas - 1]];
+                $totaltareas[$indices[0]] = $aux;
+                array_pop($totaltareas);
+                // echo "asigno";
+            } else {
 
-        $auxTareas = $this->tareas;
-        $totalTareas = count($auxTareas);
-        $totalJornadas = count($auxJornadas);
-
-        $contT = 0;
-        $contJ = 0;
-        while ($contJ < $totalJornadas && $contT < $totalTareas) {
-            $jornada = $auxJornadas[$contJ];
-            $tarea = $auxTareas[$contT];
-            while ($contT < $totalTareas) {
-                if ($jornada->getTotal() >= $tarea->getTotal()) {
-                    echo $jornada . " " . $tarea;
+                $auxjornada++;
+            }
+            $numtareas = count($totaltareas);
+        }
+        foreach ($this->operarios as $o) {
+            foreach ($jornadas as $j) {
+                if ($o->getId() == $j->getOperario()) {
+                   $o->addJornada($j);
                 }
-                $contT++;
-            }
-            $contT = 0;
-            $contJ++;
-        }
-
-
-
-
-        foreach ($auxJornadas as $jornada) {
-
-            $cont = 0;
-            $existe = false;
-            while ($cont < count($this->operarios) && $existe == false) {
-
-                if ($this->operarios[$cont]->getId() == $jornada->getOperario()) {
-                    $this->operarios[$cont]->setJornadas($jornada);
-                    $existe = true;
-                }
-                $cont++;
             }
         }
+
     }
 
     public function __toString() {

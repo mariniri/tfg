@@ -15,47 +15,58 @@ class Tarea {
 
     //Formato de fecha 2017-01-01 14:00
     private $inicio;
-    private $fechaInicio;
+ //   private $fechaInicio;
     private $fin;
-    private $fechaFin;
+ //   private $fechaFin;
     private $total;
     private $latitud;
     private $longitud;
     private $distanciaCentral;
     private $fecha;
     private $direccion;
+    private $id;
 
-    function __construct($inicio, $total, $latitud, $longitud) {
+    function __construct($inicio, $total, $latitud, $longitud,$id) {
 
         $this->total = $total;
         $this->inicio = strtotime($inicio);
-        $this->fechaInicio = date('r', $this->inicio);
+       // $this->fechaInicio = date('r', $this->inicio);
       // $this->fechaFin = date("Y-m-d H:i", strtotime('+' . $total . ' minutes', $this->inicio));
-         $this->fechaFin = date("r", strtotime('+' . $total . ' minutes', $this->inicio));
+       //  $this->fechaFin = date("r", strtotime('+' . $total . ' minutes', $this->inicio));
         $this->latitud = $latitud;
         $this->longitud = $longitud;
         $this->fecha = explode(" ", $inicio)[0];
+        $this->id=$id;
     }
 
-    function getInicio() {
-        return $this->inicio;
+    function getId() {
+        return $this->id;
     }
 
-    function getFin() {
-        return $this->fin;
+    function setId($idtarea) {
+        $this->id = $idtarea;
     }
+
+        
+//    function getInicio() {
+//        return $this->inicio;
+//    }
+//
+//    function getFin() {
+//        return $this->fin;
+//    }
 
     function getTotal() {
         return $this->total;
     }
 
-    function setInicio($inicio) {
-        $this->inicio = $inicio;
-    }
-
-    function setFin($fin) {
-        $this->fin = $fin;
-    }
+//    function setInicio($inicio) {
+//        $this->inicio = $inicio;
+//    }
+//
+//    function setFin($fin) {
+//        $this->fin = $fin;
+//    }
 
     function setTotal($total) {
         $this->total = $total;

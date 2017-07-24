@@ -28,12 +28,12 @@ class Jornada {
     function __construct($inicio, $fin) {
         $this->inicio = strtotime($inicio);
         $this->fin = strtotime($fin);
-        $this->total = $this->fin - $this->inicio;
+        $this->total = ($this->fin - $this->inicio)/60;
         $this->fechaInicio = date('r', $this->inicio);
         $this->fechaFin = date('r', $this->fin);
         $this->tareas = Array();
-        $this->fecha = explode(" ",$inicio)[0];
-        
+        $this->fecha = explode(" ", $inicio)[0];
+      //  $this->operario= $oper;
     }
 
     function comprobarDisponibilidad($tarea) {
@@ -51,19 +51,18 @@ class Jornada {
         return $esPosible;
     }
 
-    function agregarTarea($tarea,$ordenar) {
+    function agregarTarea($tarea, $ordenar) {
         $seAgrego = false;
-        if($this->total>=$tarea->getTotal()){
-        if ($this->comprobarDisponibilidad($tarea)) {
-            
-            $this->tareas[count($this->tareas)] = $tarea;
-            $this->total=$this->total-$tarea->getTotal();
-            if(count($this->tareas)>1){
-            usort($this->tareas, array("Tarea", $ordenar));
-            
+        if ($this->total >= $tarea->getTotal()) {
+            if ($this->comprobarDisponibilidad($tarea)) {
+
+                $this->tareas[count($this->tareas)] = $tarea;
+                $this->total = $this->total - $tarea->getTotal();
+                if (count($this->tareas) > 1) {
+                    usort($this->tareas, array("Tarea", $ordenar));
+                }
+                $seAgrego = true;
             }
-            $seAgrego = true;
-        }
         }
         return $seAgrego;
     }
@@ -80,18 +79,16 @@ class Jornada {
         //comprobamos que la tareaB no solape por la centro
         //                                        tareaBInicio----tareaBFin
         //                                        tareaAInicio----tareaAFin
-        
+
         if (
                 (
-                  ($tareaA->getInicio() <= $tareaB->getFin()) && ($tareaA->getInicio() >= $tareaB->getInicio())
-                )
-                || 
+                ($tareaA->getInicio() <= $tareaB->getFin()) && ($tareaA->getInicio() >= $tareaB->getInicio())
+                ) ||
                 (
-                  ($tareaA->getFin() <= $tareaB->getFin()) && ($tareaA->getFin() >= $tareaB->getInicio())
-                ) 
-                || 
+                ($tareaA->getFin() <= $tareaB->getFin()) && ($tareaA->getFin() >= $tareaB->getInicio())
+                ) ||
                 (
-                  ($tareaA->getInicio() >= $tareaB->getInicio()) && ($tareaA->getFin() <= $tareaB->getFin())
+                ($tareaA->getInicio() >= $tareaB->getInicio()) && ($tareaA->getFin() <= $tareaB->getFin())
                 )
         ) {
 
@@ -121,6 +118,11 @@ class Jornada {
         $this->fin = $fin;
     }
 
+    
+    function addTarea($t){
+        array_push($this->tareas, $t);
+    }
+
     function setTareas($tareas) {
         $this->tareas = $tareas;
     }
@@ -136,8 +138,7 @@ class Jornada {
     function getTotal() {
         return $this->total;
     }
-    
-    
+
     function getFecha() {
         return $this->fecha;
     }
@@ -153,8 +154,31 @@ class Jornada {
     function setOperario($operario) {
         $this->operario = $operario;
     }
+    
+    function numTareas(){
+        return count($this->tareas);
+    }
 
-           
+    function getLast() {
+        $item = array_values(array_slice($this->tareas, -1))[0];
+        return $item;
+    }
+
+    function getMinLibres($matrix) {
+        $tiempo = 0;
+        $tar = $this->tareas;
+        for ($i = 0; $i < count($tar); $i++) {
+            if ($i == 0) {
+                $tiempo += $tar[$i]->getTotal();
+            } else {
+                $id1 = $tar[$i]->getId();
+                $id2 = $tar[$i - 1]->getId();
+                $tiempo += $matrix["$id1"]["$id2"];
+                $tiempo += $tar[$i]->getTotal();
+            }
+        }
+        return ($this->total)-$tiempo;
+    }
 
     public function __toString() {
         $cad = "<pre>";
@@ -163,17 +187,13 @@ class Jornada {
 
         return $cad;
     }
-    
-   
-    
+
     static function compareTiempoOcupado($jornadaA, $jornadaB) {
-        
+
         if ($jornadaA->getTotal() == $jornadaB->getTotal()) {
             return 0;
         }
         return ($jornadaA->getTotal() > $jornadaB->getTotal()) ? -1 : 1;
     }
-    
-    
 
 }
