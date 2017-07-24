@@ -46,32 +46,32 @@ and open the template in the editor.
 
         $central = new Central("Universidad Pablo de Olavide", 37.355241, -5.937404, "Universidad Pablo de Olavide Spain");
         $tareas = Array();
-        array_push($tareas, new Tarea('2017-01-01 8:30', '300', 37.337252, -5.931373, 1));
-        array_push($tareas, new Tarea('2017-01-01 10:30', '300', 37.343170, -5.937070, 2));
-        array_push($tareas, new Tarea('2017-01-01 10:00', '300', 37.352671, -5.947069, 3));
+        array_push($tareas, new Tarea('2017-01-01 8:30', '30', 37.337252, -5.931373, 1));
+        array_push($tareas, new Tarea('2017-01-01 10:30', '30', 37.343170, -5.937070, 2));
+        array_push($tareas, new Tarea('2017-01-01 10:00', '30', 37.352671, -5.947069, 3));
         array_push($tareas, new Tarea('2017-01-01 14:46', '30', 37.3590926, -5.74919037, 4));
-        array_push($tareas, new Tarea('2017-01-01 15:46', '300', 37.51043415, -5.55282209, 5));
-        array_push($tareas, new Tarea('2017-01-01 16:46', '300', 37.02648063, -6.17896675, 6));
+        array_push($tareas, new Tarea('2017-01-01 15:46', '30', 37.51043415, -5.55282209, 5));
+        array_push($tareas, new Tarea('2017-01-01 16:46', '30', 37.02648063, -6.17896675, 6));
         array_push($tareas, new Tarea('2017-01-01 11:46', '30', 37.6893324, -6.24471462, 7));
-        array_push($tareas, new Tarea('2017-01-01 12:46', '300', 37.41053292, -6.23668757, 8));
+        array_push($tareas, new Tarea('2017-01-01 12:46', '30', 37.41053292, -6.23668757, 8));
 
-//        array_push($tareas, new Tarea('2017-01-01 13:46', '2017-01-01 14:00', 37.40079571, -6.07446391));
-//        array_push($tareas, new Tarea('2017-01-01 15:46', '2017-01-01 16:00', 37.47746476, -5.52077692));
-//        array_push($tareas, new Tarea('2017-01-01 16:46', '2017-01-01 17:30', 37.36511825, -5.73941369));
-//        array_push($tareas, new Tarea('2017-01-01 17:46', '2017-01-01 18:00', 37.55326254, -6.45127272));
-//        array_push($tareas, new Tarea('2017-01-01 10:46', '2017-01-01 11:05', 37.72000248, -5.8170112));
-//        array_push($tareas, new Tarea('2017-01-01 11:46', '2017-01-01 12:00', 37.76849962, -6.24883921));
-//        array_push($tareas, new Tarea('2017-01-01 12:46', '2017-01-01 16:00', 37.27382539, -6.33956964));
-//        array_push($tareas, new Tarea('2017-01-01 13:46', '2017-01-01 14:50', 37.44048757, -6.08649184));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.66329671, -6.19722272));
-//        array_push($tareas, new Tarea('2017-01-01 15:46', '2017-01-01 18:00', 37.83041326, -6.03947849));
-//        array_push($tareas, new Tarea('2017-01-01 16:46', '2017-01-01 16:50', 37.33642354, -6.27302163));
-//        array_push($tareas, new Tarea('2017-01-01 17:46', '2017-01-01 18:00', 37.25872651, -6.09619711));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.11080882, -6.23839211));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.04770585, -5.83622671));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.50697084, -5.93377569));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.77229034, -5.8679861));
-//        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.44637021, -6.54452201));
+//        array_push($tareas, new Tarea('2017-01-01 13:46', '67', 37.40079571, -6.07446391,9));
+//        array_push($tareas, new Tarea('2017-01-01 15:46', '89', 37.47746476, -5.52077692,10));
+//        array_push($tareas, new Tarea('2017-01-01 16:46', '45', 37.36511825, -5.73941369,11));
+//        array_push($tareas, new Tarea('2017-01-01 17:46', '34', 37.55326254, -6.45127272,12));
+//        array_push($tareas, new Tarea('2017-01-01 10:46', '89', 37.72000248, -5.8170112,13));
+//        array_push($tareas, new Tarea('2017-01-01 11:46', '456', 37.76849962, -6.24883921,14));
+//        array_push($tareas, new Tarea('2017-01-01 12:46', '45', 37.27382539, -6.33956964,15));
+//        array_push($tareas, new Tarea('2017-01-01 13:46', '100', 37.44048757, -6.08649184,16));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '200', 37.66329671, -6.19722272,17));
+//        array_push($tareas, new Tarea('2017-01-01 15:46', '45', 37.83041326, -6.03947849,18));
+//        array_push($tareas, new Tarea('2017-01-01 16:46', '67', 37.33642354, -6.27302163,19));
+//        array_push($tareas, new Tarea('2017-01-01 17:46', '78', 37.25872651, -6.09619711,20));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '45', 37.11080882, -6.23839211,21));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '56', 37.04770585, -5.83622671,22));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '67', 37.50697084, -5.93377569,23));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '67', 37.77229034, -5.8679861,24));
+//        array_push($tareas, new Tarea('2017-01-01 14:46', '78', 37.44637021, -6.54452201,25));
 //        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.30277325, -5.71260069));
 //        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.14006767, -5.87072296));
 //        array_push($tareas, new Tarea('2017-01-01 14:46', '2017-01-01 16:00', 37.22081312, -5.64454292));
@@ -155,8 +155,10 @@ and open the template in the editor.
 //      //   print_r($planificador->getTareas());
 
         $planificador->distribuirTareas("2017-01-01");
-        //  echo "Operario con sus Tareas asignadas:<br>";
-        //   print_r($planificador->getOperarios());
+          echo "Operario con sus Tareas asignadas:<br>";
+          echo "<pre>";
+           print_r($planificador->getOperarios());
+           echo "</pre>";
 //        $plan = new Plan();
 //        foreach ($tareas as $v) {
 //            $plan->addPlace($v);
@@ -205,19 +207,23 @@ and open the template in the editor.
             $nombre = $oper->getNombre();
 
             $jornadasOper = $oper->getJornadas();
-            echo "<pre>";
-            var_dump($jornadasOper);
-            echo "</pre>";
+//            echo "<pre>";
+//            var_dump($jornadasOper);
+//            echo "</pre>";
             if ($cont == 1) {
                 $gmap->addMarkerByCoords($central->getLatitud(), $central->getLongitud(), 'Central :' . $central->getNombre(), '<strong>Direccion: <br>' . $central->getDireccion() . '</strong>', '', $colorsIcons[0], 0, true, $central->getNombre());
             }
-            foreach ($jornadasOper->getTareas() as $t) {
 
-                if (count($t) > 0) {
-                    $gmap->addMarkerByCoords($t->getLatitud(), $t->getLongitud(), 'Operario ' . $nombre, '<strong>Operario : '  .  '<br>Total Minutos: ' . ($t->getTotal() ) . '</strong>', '', $colorsIcons[$colors], $cont++, true, $nombre);
+
+
+            foreach ($jornadasOper as $j) {
+                foreach ($j->getTareas() as $t) {
+                   // if (count($t) > 0) {
+                        $gmap->addMarkerByCoords($t->getLatitud(), $t->getLongitud(), 'Operario ' . $nombre, '<strong>Operario : ' . '<br>Total Minutos: ' . ($t->getTotal() ) . '</strong>', '', $colorsIcons[$colors], $cont++, true, $nombre);
+                   // }
                 }
+                $colors++;
             }
-            $colors++;
         }
 
         $gmap->addPolyLines();
