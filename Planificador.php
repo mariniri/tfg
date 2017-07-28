@@ -132,17 +132,36 @@ class Planificador {
                 $last = $jornadas[$auxjornada]->getLast();
                 $lastid = $last->getId();
                 $nowid = $totaltareas[$auxtarea]->getId();
+                $horafin = $last->getHoraFin();
                 $despl = $this->matrix["$lastid"]["$nowid"];
+               // echo "from " . $lastid . " to ". $nowid;
+                $horainicio = $this->sumarHora($horafin, $despl);
+               // echo $horainicio .  " hora inicio<br>";
+                $total = $despl + $totaltareas[$auxtarea]->getTotal();
+
+            } else {
+                $despl = $totaltareas[$auxtarea]->getDistanciaCentralDos($this->central);
+                $hora = $jornadas[$auxjornada]->getHoraInicio();
+                $horainicio = $this->sumarHora($hora, $despl);
+               // echo $horainicio .  " hora inicio primera tarea<br>";
+                $total = $despl + $totaltareas[$auxtarea]->getTotal();
             }
-            $total = $despl + $totaltareas[$auxtarea]->getTotal();
-            //echo $jornadas[$auxjornada]->getMinLibres($this->matrix);
-            if ($jornadas[$auxjornada]->getMinLibres($this->matrix) >= $total) {
+          
+            if ($jornadas[$auxjornada]->getMinLibres($this->matrix) >= $total) {  
                 $indices = array_keys($totaltareas);
                 $jornadas[$auxjornada]->addTarea($totaltareas[$indices[0]]);
                 $aux = $totaltareas[$indices[$numtareas - 1]];
+                $aux->setHoraInicio($horainicio);
+                $fin = $this->sumarHora($horainicio, $aux->getTotal());
+                $aux->setHoraFin($fin);
                 $totaltareas[$indices[0]] = $aux;
+                echo "<pre>";
+                var_dump($aux);
+                echo "</pre>";
+                //echo $fin .  " hora fin<br>";
                 array_pop($totaltareas);
-                // echo "asigno";
+                reset($totaltareas);
+                
             } else {
 
                 $auxjornada++;
@@ -152,11 +171,16 @@ class Planificador {
         foreach ($this->operarios as $o) {
             foreach ($jornadas as $j) {
                 if ($o->getId() == $j->getOperario()) {
-                   $o->addJornada($j);
+                    $o->addJornada($j);
                 }
             }
         }
+    }
 
+    function sumarHora($hora, $minutos) {
+        $fecha = strtotime($hora) + ($minutos*60);
+     //   echo $fecha;
+        return date('r', $fecha);
     }
 
     public function __toString() {

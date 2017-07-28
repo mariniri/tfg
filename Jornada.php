@@ -17,9 +17,9 @@ class Jornada {
 
     //Formato de fecha 2017-01-01 14:00
     private $inicio;
-    private $fechaInicio;
+    private $horaInicio;
     private $fin;
-    private $fechaFin;
+    private $horaFin;
     private $total;
     private $tareas;
     private $fecha;
@@ -29,8 +29,8 @@ class Jornada {
         $this->inicio = strtotime($inicio);
         $this->fin = strtotime($fin);
         $this->total = ($this->fin - $this->inicio)/60;
-        $this->fechaInicio = date('r', $this->inicio);
-        $this->fechaFin = date('r', $this->fin);
+        $this->horaInicio = date('r', $this->inicio);
+        $this->horaFin = date('r', $this->fin);
         $this->tareas = Array();
         $this->fecha = explode(" ", $inicio)[0];
       //  $this->operario= $oper;
@@ -127,12 +127,12 @@ class Jornada {
         $this->tareas = $tareas;
     }
 
-    function getFechaInicio() {
-        return $this->fechaInicio;
+    function getHoraInicio() {
+        return $this->horaInicio;
     }
 
-    function getFechaFin() {
-        return $this->fechaFin;
+    function getHoraFin() {
+        return $this->horaFin;
     }
 
     function getTotal() {
