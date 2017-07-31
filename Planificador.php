@@ -126,46 +126,45 @@ class Planificador {
         $numjornadas = count($jornadas);
         $auxjornada = 0;
         $auxtarea = 0;
-        while ($numtareas > 0 && $auxjornada < $numjornadas) {
-            $despl = 0;
-            if ($jornadas[$auxjornada]->numTareas() > 0) {
-                $last = $jornadas[$auxjornada]->getLast();
-                $lastid = $last->getId();
-                $nowid = $totaltareas[$auxtarea]->getId();
-                $horafin = $last->getHoraFin();
-                $despl = $this->matrix["$lastid"]["$nowid"];
-               // echo "from " . $lastid . " to ". $nowid;
-                $horainicio = $this->sumarHora($horafin, $despl);
-               // echo $horainicio .  " hora inicio<br>";
-                $total = $despl + $totaltareas[$auxtarea]->getTotal();
-
+        while ($auxtarea < $numtareas && $auxjornada < $numjornadas) {
+            $indices = array_keys($totaltareas);
+            $nummenos = $numtareas - 1;
+            $dist = 0;
+            $jor = $jornadas[$auxjornada];
+            $auxnum = $jor->numTareas();
+            $current = $totaltareas[$indices[$auxtarea]];
+            if ($auxnum > 0) {
+                $last = $jor->getLast();
+                $dist = $this->distanciaEntreDos($current, $last);
+                $total = $dist + $current->getTotal();
+                $lastfin = $last->getHoraFin();
             } else {
-                $despl = $totaltareas[$auxtarea]->getDistanciaCentralDos($this->central);
-                $hora = $jornadas[$auxjornada]->getHoraInicio();
-                $horainicio = $this->sumarHora($hora, $despl);
-               // echo $horainicio .  " hora inicio primera tarea<br>";
-                $total = $despl + $totaltareas[$auxtarea]->getTotal();
+                $dist = $current->getDistanciaCentralDos($this->central);
+                $total = $dist + $current->getTotal();
+                $lastfin = $jor->getHoraInicio();
             }
-          
-            if ($jornadas[$auxjornada]->getMinLibres($this->matrix) >= $total) {  
+            echo $jor->getMinutosLibres() . " inutos libres y necesitas " . $total . " para tareaId" . $current->getId() . "<br>";
+            if ($jor->getMinutosLibres() >= $total) {
+
+                $horainicio = $this->sumarHora($lastfin, $dist);
+                $horafin = $this->sumarHora($horainicio, $current->getTotal());
+                $current->setHoraInicio($horainicio);
                 $indices = array_keys($totaltareas);
-                $jornadas[$auxjornada]->addTarea($totaltareas[$indices[0]]);
-                $aux = $totaltareas[$indices[$numtareas - 1]];
-                $aux->setHoraInicio($horainicio);
-                $fin = $this->sumarHora($horainicio, $aux->getTotal());
-                $aux->setHoraFin($fin);
-                $totaltareas[$indices[0]] = $aux;
-                echo "<pre>";
-                var_dump($aux);
-                echo "</pre>";
-                //echo $fin .  " hora fin<br>";
-                array_pop($totaltareas);
-                reset($totaltareas);
-                
+                $jor->addTarea($current);
+                $auxid = $current->getId();
+                unset($totaltareas[$auxid]);
+                $auxtarea++;
             } else {
-
-                $auxjornada++;
+                $auxtarea++;
             }
+            if ($auxtarea == $nummenos) {
+                echo "nuevajornda";
+                $auxjornada++;
+                $auxtarea = 0;
+                echo count($totaltareas);
+            }
+
+
             $numtareas = count($totaltareas);
         }
         foreach ($this->operarios as $o) {
@@ -178,8 +177,7 @@ class Planificador {
     }
 
     function sumarHora($hora, $minutos) {
-        $fecha = strtotime($hora) + ($minutos*60);
-     //   echo $fecha;
+        $fecha = strtotime($hora) + ($minutos * 60);
         return date('r', $fecha);
     }
 
@@ -189,6 +187,13 @@ class Planificador {
         $cad .= "</pre>";
 
         return $cad;
+    }
+
+    function distanciaEntreDos($tarea1, $tarea2) {
+        $id1 = $tarea1->getId();
+        $id2 = $tarea2->getId();
+        $dist = $this->matrix["$id1"]["$id2"];
+        return $dist;
     }
 
 }

@@ -22,7 +22,6 @@ class Distance {
         } else {
             if ($type == "time") {
                 $time = $response_a['rows'][0]['elements'][0]['duration']['text'];
-                echo "TIME ". $time."<br>";
                 return $this->getSegundos($time);
             } else {
                 $dist = $response_a['rows'][0]['elements'][0]['distance']['text'];

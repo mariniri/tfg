@@ -47,13 +47,13 @@ and open the template in the editor.
         $central = new Central("Universidad Pablo de Olavide", 37.355241, -5.937404, "Universidad Pablo de Olavide Spain");
         $tareas = Array();
         array_push($tareas, new Tarea('2017-01-01 8:30', 15, 37.337252, -5.931373, 1));
-        array_push($tareas, new Tarea('2017-01-01 10:30', 50, 37.343170, -5.937070, 2));
-        array_push($tareas, new Tarea('2017-01-01 10:00', 30, 37.352671, -5.947069, 3));
+        array_push($tareas, new Tarea('2017-01-01 10:30', 300, 37.343170, -5.937070, 2));
+        array_push($tareas, new Tarea('2017-01-01 10:00', 300, 37.352671, -5.947069, 3));
         array_push($tareas, new Tarea('2017-01-01 14:46', 30, 37.3590926, -5.74919037, 4));
         array_push($tareas, new Tarea('2017-01-01 15:46', 30, 37.51043415, -5.55282209, 5));
-        array_push($tareas, new Tarea('2017-01-01 16:46', 30, 37.02648063, -6.17896675, 6));
+        array_push($tareas, new Tarea('2017-01-01 16:46', 40, 37.02648063, -6.17896675, 6));
         array_push($tareas, new Tarea('2017-01-01 11:46', 30, 37.6893324, -6.24471462, 7));
-        array_push($tareas, new Tarea('2017-01-01 12:46', 30, 37.41053292, -6.23668757, 8));
+        array_push($tareas, new Tarea('2017-01-01 12:46', 15, 37.41053292, -6.23668757, 8));
 
         array_push($tareas, new Tarea('2017-01-01 13:46', 67, 37.40079571, -6.07446391,9));
         array_push($tareas, new Tarea('2017-01-01 15:46', 89, 37.47746476, -5.52077692,10));
