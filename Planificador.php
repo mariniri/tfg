@@ -26,6 +26,7 @@ class Planificador {
         $this->operarios = $operarios;
         $this->tareas = $tareas;
         $this->central = $central;
+        $this->pendientes = Array();
         $this->calcularDistanciaCentral();
         usort($this->tareas, array("Tarea", "compareDistancias"));
         $this->matrizDistancias("time", $this->tareas);
@@ -143,25 +144,25 @@ class Planificador {
                 $total = $dist + $current->getTotal();
                 $lastfin = $jor->getHoraInicio();
             }
-            echo $jor->getMinutosLibres() . " inutos libres y necesitas " . $total . " para tareaId" . $current->getId() . "<br>";
+            // echo $jor->getMinutosLibres() . " minutos libres / despl " . $dist . "/ dur ".$current->getTotal()." /tareaId " . $current->getId() . " TOTAL ".$total."<br>";
             if ($jor->getMinutosLibres() >= $total) {
-
+                // echo "asigno ".$current->getId()."<br>";
                 $horainicio = $this->sumarHora($lastfin, $dist);
                 $horafin = $this->sumarHora($horainicio, $current->getTotal());
                 $current->setHoraInicio($horainicio);
+                $current->setHoraFin($horafin);
                 $indices = array_keys($totaltareas);
-                $jor->addTarea($current);
-                $auxid = $current->getId();
-                unset($totaltareas[$auxid]);
+                $jor->addTarea($current, $total);
+                unset($totaltareas[$indices[$auxtarea]]);
                 $auxtarea++;
             } else {
+                array_push($this->pendientes, $current);
                 $auxtarea++;
             }
             if ($auxtarea == $nummenos) {
-                echo "nuevajornda";
+                // echo "nuevajornda";
                 $auxjornada++;
                 $auxtarea = 0;
-                echo count($totaltareas);
             }
 
 
@@ -174,10 +175,71 @@ class Planificador {
                 }
             }
         }
+        //devuelve las que no se han podido asignar
+        return $this->pendientes;
+    }
+
+    function cancelarTarea($jornada, $tarea) {
+        $i = array_search($tarea->getId(), array_keys($jornada));
+        $keys = array_keys($jornada);
+        $idlast = $keys[$i - 1];
+        $total = $this->distanciaEntreDos($tarea->getId(), $idlast);
+        $jornada->cancelarTarea($tarea, $total);
+    }
+
+    function reasignarTarea($jornada, $tarea) {
+        //Comprobamos si el mismo operario tiene tiempo para ir al final
+        $asignada = false;
+        $last = $jornada->getLast();
+        $dist = $this->distanciaEntreDos($tarea, $last);
+        $total = $tarea->getTotal() + $dist;
+        echo "total " . $total . " min libres " . $jornada->getMinutosLibres() . "<br>";
+        if ($jornada->getMinutosLibres() >= $total) {
+            $jornada->removeTarea($tarea);
+            $jornada->addTarea($tarea, $total);
+            $asignada = true;
+            // Si no puede el mismo, vemos si otro puede.
+        } else {
+            $jornada->removeTarea($tarea);
+            $fecha = $tarea->getFecha();
+            $jornadas = Array();
+            foreach ($this->operarios as $operario) {
+                $aux = $operario->getJornadaDia($fecha);
+                if ($aux != $jornada && $aux != null) {
+                    array_push($jornadas, $aux);
+                }
+            }
+            usort($jornadas, function($a, $b) use ($tarea) {
+                $valorA = $a->getMinutosLibres() - $this->distanciaEntreDos($a->getLast(), $tarea);
+                $valorB = $b->getMinutosLibres() - $this->distanciaEntreDos($b->getLast(), $tarea);
+                if ($valorA == $valorB) {
+                    return 0;
+                }
+                return ($valorB > $valorA) ? -1 : 1;
+            });
+            for ($i = 0; $i < count($jornadas) && $asignada == false; $i++) {
+                $last = $jornadas[$i]->getLast();
+                $total = $this->distanciaEntreDos($jornadas[$i]->getLast(), $tarea) + $tarea->getTotal();
+                echo "tarda " . $this->distanciaEntreDos($jornadas[$i]->getLast(), $tarea) . "<br>";
+                echo "dura " . $tarea->getTotal() . "<br>";
+                echo $jornadas[$i]->getMinutosLibres() . " min libres " . $total . " total<br>";
+                if ($jornadas[$i]->getMinutosLibres() >= $total) {
+                    $jornadas[$i]->addTarea($tarea, $total);
+                    $asignada = true;
+                    echo "reasignada";
+                }
+            }
+        }
+        if(!$asignada){
+            array_push($this->pendientes,$tarea);
+        }
+        return $asignada;
     }
 
     function sumarHora($hora, $minutos) {
+        //// echo "hora inicio " . $hora . "  minutos " . $minutos . "<br>";
         $fecha = strtotime($hora) + ($minutos * 60);
+        // echo "fecha ".  date('r', $fecha)."<br>";
         return date('r', $fecha);
     }
 

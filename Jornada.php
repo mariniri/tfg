@@ -25,16 +25,18 @@ class Jornada {
     private $fecha;
     private $operario;
     private $minutoslibres;
+    private $id;
 
-    function __construct($inicio, $fin) {
+    function __construct($inicio, $fin, $id) {
         $this->inicio = strtotime($inicio);
         $this->fin = strtotime($fin);
-        $this->total = ($this->fin - $this->inicio)/60-60;
+        $this->total = ($this->fin - $this->inicio) / 60 - 60;
         $this->horaInicio = date('r', $this->inicio);
         $this->horaFin = date('r', $this->fin);
         $this->tareas = Array();
         $this->fecha = explode(" ", $inicio)[0];
-       $this->minutoslibres= $this->total;
+        $this->minutoslibres = $this->total;
+        $this->id = $id;
     }
 
 //    function comprobarDisponibilidad($tarea) {
@@ -103,6 +105,14 @@ class Jornada {
         return $this->inicio;
     }
 
+    function getId() {
+        return $this->id;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
     function getFin() {
         return $this->fin;
     }
@@ -110,6 +120,7 @@ class Jornada {
     function getTareas() {
         return $this->tareas;
     }
+
     function getMinutoslibres() {
         return $this->minutoslibres;
     }
@@ -118,7 +129,7 @@ class Jornada {
         $this->minutoslibres = $minutoslibres;
     }
 
-        function setInicio($inicio) {
+    function setInicio($inicio) {
         $this->inicio = $inicio;
     }
 
@@ -126,10 +137,22 @@ class Jornada {
         $this->fin = $fin;
     }
 
-    
-    function addTarea($t){
-        array_push($this->tareas, $t);
-        $this->setMinutoslibres($this->minutoslibres-$t->getTotal());
+    function removeTarea($tarea) {
+        $id = $tarea->getId();
+        unset($this->tareas[$id]);
+    }
+
+    function cancelarTarea($tarea,$total) {
+        $id = $tarea->getId();
+        unset($this->tareas[$id]);
+        $this->setMinutoslibres($this->minutoslibres + $total);
+    }
+
+    function addTarea($t, $total) {
+        // array_push($this->tareas, $t);
+        $id = $t->getId();
+        $this->tareas["$id"] = $t;
+        $this->setMinutoslibres($this->minutoslibres - $total);
     }
 
     function setTareas($tareas) {
@@ -159,6 +182,7 @@ class Jornada {
     function getOperario() {
         return $this->operario;
     }
+
     function getOperarioNombre() {
         return $this->operario->getNombre();
     }
@@ -166,8 +190,8 @@ class Jornada {
     function setOperario($operario) {
         $this->operario = $operario;
     }
-    
-    function numTareas(){
+
+    function numTareas() {
         return count($this->tareas);
     }
 
@@ -175,8 +199,6 @@ class Jornada {
         $item = array_values(array_slice($this->tareas, -1))[0];
         return $item;
     }
-
-  
 
     public function __toString() {
         $cad = "<pre>";
@@ -188,10 +210,10 @@ class Jornada {
 
     static function compareTiempoOcupado($jornadaA, $jornadaB) {
 
-        if ($jornadaA->getTotal() == $jornadaB->getTotal()) {
+        if ($jornadaA->getMinutosLibres() == $jornadaB->getMinutosLibres()) {
             return 0;
         }
-        return ($jornadaA->getTotal() > $jornadaB->getTotal()) ? -1 : 1;
+        return ($jornadaB->getMinutosLibres() > $jornadaA->getMinutosLibres()) ? -1 : 1;
     }
 
 }
